@@ -2,17 +2,18 @@ package de.novatec.schadenbuchen.flow;
 
 import io.zeebe.client.api.response.ActivatedJob;
 import io.zeebe.client.api.worker.JobClient;
-import io.zeebe.client.api.worker.JobHandler;
 import io.zeebe.spring.client.annotation.ZeebeWorker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class TransferMoney implements JobHandler {
+@Component
+public class TransferMoney {
 
     @Autowired
     BankService bankService;
 
     //TODO type ergaenzen
-    @ZeebeWorker(type="geld-ueberweisen")
+    @ZeebeWorker(type="zahle-aus-z")
     public void handle(JobClient client, ActivatedJob job) throws Exception {
 
         String customerId = (String) job.getVariablesAsMap().get("customerId");

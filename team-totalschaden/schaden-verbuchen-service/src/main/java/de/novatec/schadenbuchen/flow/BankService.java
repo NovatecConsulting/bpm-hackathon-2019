@@ -1,9 +1,7 @@
 package de.novatec.schadenbuchen.flow;
 
 import kong.unirest.Unirest;
-import org.springframework.stereotype.Service;
 
-@Service
 public class BankService {
 
     public BankDetails getBankDetails(String customerId) {
