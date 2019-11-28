@@ -2,6 +2,7 @@ package eagle.process.transportorder
 
 import io.zeebe.client.ZeebeClient
 import io.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder
+import io.zeebe.gateway.protocol.GatewayGrpc
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -57,6 +58,7 @@ class TransportOrderProcess {
                 .newCreateInstanceCommand()
                 .bpmnProcessId("transport-order-process")
                 .latestVersion()
+                .variables(mapOf(Pair("processDisplayName", "Transport Order Process")))
                 .send()
                 .join()
 
