@@ -1,2 +1,2 @@
-# BPM Hackathoon 2019
+# BPM Hackathon 2019
 ## Team Totalschaden

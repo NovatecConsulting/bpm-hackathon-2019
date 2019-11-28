@@ -15,3 +15,6 @@ spring:
     username: camunda
     password: camunda
     driver-class-name: org.postgresql.Driver
+schaden:
+  customer:
+    endpoint: "http://localhost:10000/customer"

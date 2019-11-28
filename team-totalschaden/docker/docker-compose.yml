@@ -7,11 +7,13 @@ services:
     networks:
       - hackathon
     depends_on:
-      - kafka
-      - zeebe
+#      - kafka
+#      - zeebe
       - postgres
+      - mountebank
     ports:
       - 8080:8080
+      - 5005:5005
   postgres:
     build:
       context: ..
@@ -32,37 +34,38 @@ services:
       dockerfile: ./docker/mountebank/Dockerfile
     ports:
       - 2525:2525
+      - 10000:10000
     networks:
       - hackathon
-  zookeeper:
-    image: "confluentinc/cp-zookeeper:latest"
-    hostname: zookeeper
-    networks:
-      - hackathon
-    ports:
-      - 2181:2181
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-  kafka:
-    image: "confluentinc/cp-kafka:latest"
-    hostname: kafka
-    networks:
-      - hackathon
-    ports:
-      - 9092:9092
-    environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-  zeebe:
-    image: camunda/zeebe:0.20.1
-    hostname: zeebe
-    networks:
-      - hackathon
-    ports:
-      - 26500:26500
+#  zookeeper:
+#    image: "confluentinc/cp-zookeeper:latest"
+#    hostname: zookeeper
+#    networks:
+#      - hackathon
+#    ports:
+#      - 2181:2181
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#  kafka:
+#    image: "confluentinc/cp-kafka:latest"
+#    hostname: kafka
+#    networks:
+#      - hackathon
+#    ports:
+#      - 9092:9092
+#    environment:
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#  zeebe:
+#    image: camunda/zeebe:0.20.1
+#    hostname: zeebe
+#    networks:
+#      - hackathon
+#    ports:
+#      - 26500:26500
 networks:
   hackathon:
     driver: bridge

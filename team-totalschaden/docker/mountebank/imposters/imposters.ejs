@@ -1,16 +1,16 @@
 {
   "imposters": [
     {
-      "port": 1000,
+      "port": 10000,
       "protocol": "http",
-      "name": "Test",
+      "name": "CustomerService",
       "stubs": [
         {
           "predicates": [
             {
               "equals": {
                 "method": "GET",
-                "path": "/test"
+                "path": "/customer/12345"
               }
             }
           ],
@@ -22,7 +22,18 @@
                   "Content-Type": "application/json"
                 },
                 "body": {
-                  "message": "success"
+                  "traceId": "fooooo",
+                  "customer": {
+                    "name" : "Marco",
+                    "customerNo" : "12345",
+                    "contractNo" : "X-233RF",
+                    "contractLevel" : 3,
+                    "car" : {
+                      "originalValue" : 100000,
+                      "age" : 1,
+                      "brand" : "Tesla"
+                    }
+                  }
                 }
               }
             }
