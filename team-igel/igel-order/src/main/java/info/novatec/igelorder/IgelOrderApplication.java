@@ -1,20 +1,18 @@
 package info.novatec.igelorder;
 
-import javax.annotation.PostConstruct;
-
+import io.zeebe.client.ZeebeClient;
+import io.zeebe.client.api.response.DeploymentEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import io.zeebe.client.ZeebeClient;
-import io.zeebe.client.ZeebeClientBuilder;
-import io.zeebe.client.api.response.DeploymentEvent;
+import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 public class IgelOrderApplication {
 
     @Autowired
-    private ZeebeClientBuilder zeebeClientBuilder;
+    private ZeebeClient zeebeClient;
 
     public static void main(String[] args) {
         SpringApplication.run(IgelOrderApplication.class, args);
@@ -22,15 +20,12 @@ public class IgelOrderApplication {
 
     @PostConstruct
     public void deployZeebeProcess() {
-        try (ZeebeClient client = zeebeClientBuilder.build()) {
+        final DeploymentEvent deploymentEvent = zeebeClient.newDeployCommand()
+            .addResourceFromClasspath("order.bpmn")
+            .send()
+            .join();
 
-            final DeploymentEvent deploymentEvent = client.newDeployCommand()
-                .addResourceFromClasspath("order.bpmn")
-                .send()
-                .join();
-
-            System.out.println("Deployment created with key: " + deploymentEvent.getKey());
-        }
+        System.out.println("Deployment created with key: " + deploymentEvent.getKey());
     }
 
 }

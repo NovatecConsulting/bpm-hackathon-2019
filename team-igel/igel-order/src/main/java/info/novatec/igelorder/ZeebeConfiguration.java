@@ -14,7 +14,12 @@ public class ZeebeConfiguration {
     private String brokerContactPoint;
 
     @Bean
-    ZeebeClientBuilder zeebeClientBuilder() {
+    public ZeebeClientBuilder zeebeClientBuilder() {
         return ZeebeClient.newClientBuilder().brokerContactPoint(brokerContactPoint).usePlaintext();
+    }
+
+    @Bean(destroyMethod = "close")
+    public ZeebeClient zeebeClient(ZeebeClientBuilder builder) {
+        return builder.build();
     }
 }

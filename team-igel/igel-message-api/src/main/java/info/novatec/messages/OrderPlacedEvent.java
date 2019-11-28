@@ -74,4 +74,13 @@ public class OrderPlacedEvent {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "OrderPlacedEvent{" +
+                "orderId='" + orderId + '\'' +
+                ", item='" + item + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }
