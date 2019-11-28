@@ -38,7 +38,36 @@
               }
             }
           ]
+        },
+        {
+          "predicates": [
+            {
+              "equals": {
+                "method": "GET",
+                "path": "/bank/12345"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "is": {
+                "statusCode": 200,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "body": {
+                  "traceId": "fooba",
+                  "bankdetails": {
+                    "customerId": "12345",
+                    "iban": "DE43910293019293",
+                    "bankcode": "AUG913XXDE"
+                  }
+                }
+              }
+            }
+          ]
         }
+
       ]
     }
   ]
