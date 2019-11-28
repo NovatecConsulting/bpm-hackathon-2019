@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_072pgd4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.7.0">
-  <bpmn:process id="book-itinerary" name="Itinerary Booking Process" isExecutable="true">
+  <bpmn:process id="transport-order-process" name="Transport Order Process" isExecutable="true">
     <bpmn:endEvent id="transport-booked" name="Transport Booked">
       <bpmn:incoming>SequenceFlow_121x8db</bpmn:incoming>
     </bpmn:endEvent>
@@ -65,7 +65,7 @@
   </bpmn:message>
   <bpmn:message id="Message_06umits" name="start-message" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="book-itinerary">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="transport-order-process">
       <bpmndi:BPMNShape id="EndEvent_1b7wrpm_di" bpmnElement="transport-booked">
         <dc:Bounds x="1072" y="129" width="36" height="36" />
         <bpmndi:BPMNLabel>
