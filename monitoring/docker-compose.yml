@@ -16,7 +16,7 @@ services:
       - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_PASSWORD: changeme
+      ELASTIC_PASSWORD: demo
     networks:
       - elk
 
@@ -54,6 +54,17 @@ services:
       - elk
     depends_on:
       - elasticsearch
+  
+  postgres:
+    image: postgres:11.2
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB: demo
 
 networks:
   elk:
@@ -61,3 +72,4 @@ networks:
 
 volumes:
   elasticsearch:
+  dbdata:
