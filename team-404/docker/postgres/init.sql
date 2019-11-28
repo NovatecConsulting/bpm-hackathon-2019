@@ -1,3 +1,0 @@
-CREATE USER camunda;
-CREATE DATABASE camunda;
-GRANT ALL PRIVILEGES ON DATABASE camunda TO camunda;
