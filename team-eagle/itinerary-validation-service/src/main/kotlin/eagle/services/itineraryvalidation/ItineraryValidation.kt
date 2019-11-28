@@ -26,6 +26,7 @@ class ItineraryValidation {
                 .handler { jobClient, job ->
                     LOGGER.info("Job received")
                     jobClient.newCompleteCommand(job.key)
+                            .variables(mapOf(Pair("itinerary", "confirmed")))
                             .send()
                             .join()
                 }
