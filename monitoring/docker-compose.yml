@@ -47,6 +47,7 @@ services:
       - elk
     depends_on:
       - elasticsearch
+      - postgres
 
   kibana:
     build:
