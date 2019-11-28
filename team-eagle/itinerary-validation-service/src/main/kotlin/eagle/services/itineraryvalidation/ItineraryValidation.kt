@@ -26,7 +26,7 @@ class ItineraryValidation {
                 .handler { jobClient, job ->
                     LOGGER.info("Job received")
                     jobClient.newCompleteCommand(job.key)
-                            .variables(mapOf(Pair("itinerary", "confirmed")))
+                            .variables(mapOf(Pair("itinerary", checkItinerary())))
                             .send()
                             .join()
                 }
@@ -37,6 +37,10 @@ class ItineraryValidation {
     fun close() {
         jobWorker.close()
         zeebeClient.close()
+    }
+
+    fun checkItinerary(): String {
+        return if (Math.random() < 0.75) "confirmed" else "rejected"
     }
 
     companion object {
