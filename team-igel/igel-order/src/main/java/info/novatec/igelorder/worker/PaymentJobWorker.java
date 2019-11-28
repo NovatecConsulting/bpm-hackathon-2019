@@ -43,14 +43,14 @@ public class PaymentJobWorker implements JobHandler {
 
     @PreDestroy
     public void close() {
-        System.out.println("Closing down Dummy Worker!");
+        System.out.println("Closing down Payment Worker!");
         worker.close();
     }
 
     @Override
     public void handle(JobClient client, ActivatedJob job) throws Exception {
         OrderPlacedEvent order = job.getVariablesAsType(OrderPlacedEvent.class);
-        System.out.println("Dummy worker is working, handling, partying: " + order);
+        System.out.println("Payment worker is working, handling, partying: " + order);
         client.newCompleteCommand(job.getKey())
                 .send().join();
     }
