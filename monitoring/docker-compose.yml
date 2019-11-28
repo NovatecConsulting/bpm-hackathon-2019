@@ -43,6 +43,9 @@ services:
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PW: ${ELASTIC_PW}
+      DB_SCHEMA: ${DB_SCHEMA}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
     networks:
       - elk
     depends_on:
@@ -75,9 +78,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: demo
-      POSTGRES_PASSWORD: demo
-      POSTGRES_DB: demo
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_SCHEMA}
     networks:
       - elk
 
