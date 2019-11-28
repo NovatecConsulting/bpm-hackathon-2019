@@ -30,6 +30,10 @@ services:
           ELK_VERSION: ${ELK_VERSION}
     volumes:
       - type: bind
+        source: ./elk_config/logstash/last_run
+        target: /usr/share/logstash/last_run/
+        read_only: false
+      - type: bind
         source: ./elk_config/logstash/config/logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
