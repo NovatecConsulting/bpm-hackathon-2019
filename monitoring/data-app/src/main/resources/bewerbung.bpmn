@@ -3,12 +3,12 @@
   <bpmn:collaboration id="Collaboration_1pgoefx">
     <bpmn:participant id="Participant_0mmd4f1" name="Bewerbung" processRef="Bewerbung" />
     <bpmn:participant id="Participant_0hdoqz8" name="Bewerber" />
-    <bpmn:messageFlow id="MessageFlow_1khk6ro" sourceRef="Participant_0hdoqz8" targetRef="StartEvent_1" />
-    <bpmn:messageFlow id="MessageFlow_0b4hvux" sourceRef="EndEvent_1v0cmjh" targetRef="Participant_0hdoqz8" />
-    <bpmn:messageFlow id="MessageFlow_1yheycm" sourceRef="EndEvent_0qzdz1m" targetRef="Participant_0hdoqz8" />
+    <bpmn:messageFlow id="MessageFlow_1khk6ro" sourceRef="Participant_0hdoqz8" targetRef="StartEvent_BewerbungEingegangen" />
+    <bpmn:messageFlow id="MessageFlow_0b4hvux" sourceRef="EndEvent_BewerberEingestellt" targetRef="Participant_0hdoqz8" />
+    <bpmn:messageFlow id="MessageFlow_1yheycm" sourceRef="EndEvent_BewerbungAbgelehnt" targetRef="Participant_0hdoqz8" />
   </bpmn:collaboration>
   <bpmn:process id="Bewerbung" isExecutable="true">
-    <bpmn:serviceTask id="Task_0brc0hq" name="Bewerbung prüfen" camunda:delegateExpression="${doSomething}">
+    <bpmn:serviceTask id="Task_BewerbungPruefen" name="Bewerbung prüfen" camunda:delegateExpression="${doSomething}">
       <bpmn:incoming>SequenceFlow_0q1zhm9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_07y4s9a</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -17,15 +17,15 @@
       <bpmn:outgoing>SequenceFlow_01z0zv9</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0ei3gjj</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Task_0trqo4e" name="Manuelle Vorqualifizierung" camunda:delegateExpression="${doSomething}">
+    <bpmn:serviceTask id="Task_ManuelleVorqualifizierung" name="Manuelle Vorqualifizierung" camunda:delegateExpression="${doSomething}">
       <bpmn:incoming>SequenceFlow_0ei3gjj</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1b4unvi</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_0c8huvr" name="Meinung eingeben" camunda:delegateExpression="${doSomething}">
+    <bpmn:serviceTask id="Task_MeinungEingeben" name="Meinung eingeben" camunda:delegateExpression="${doSomething}">
       <bpmn:incoming>SequenceFlow_1ilakt5</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1to01r7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_1i0crmq" name="Gespräch durchführen" camunda:delegateExpression="${doSomething}">
+    <bpmn:serviceTask id="Task_GespraechDurchfuehren" name="Gespräch durchführen" camunda:delegateExpression="${doSomething}">
       <bpmn:incoming>SequenceFlow_12yqjhc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1dou0pi</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -44,69 +44,69 @@
       <bpmn:outgoing>SequenceFlow_04szoqc</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0fbklrx</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Task_0fb7p91" name="Zufallswerte generieren" camunda:asyncBefore="true" camunda:delegateExpression="${initValues}">
+    <bpmn:serviceTask id="Task_ZufallswerteGenerieren" name="Zufallswerte generieren" camunda:asyncBefore="true" camunda:delegateExpression="${initValues}">
       <bpmn:incoming>SequenceFlow_0run277</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_10xvqn4</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0q1zhm9</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_1pf0cya" name="Angaben gehen ein" camunda:delegateExpression="${doSomething}">
+    <bpmn:serviceTask id="Task_AngabenGehenEin" name="Angaben gehen ein" camunda:delegateExpression="${doSomething}">
       <bpmn:incoming>SequenceFlow_01z0zv9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_10xvqn4</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="BoundaryEvent_0th7d21" name="2 Sekunden" attachedToRef="Task_1pf0cya">
+    <bpmn:boundaryEvent id="BoundaryEvent_0th7d21" name="2 Sekunden" attachedToRef="Task_AngabenGehenEin">
       <bpmn:outgoing>SequenceFlow_0d7v1eh</bpmn:outgoing>
       <bpmn:timerEventDefinition>
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT2S</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0run277" sourceRef="StartEvent_1" targetRef="Task_0fb7p91" />
-    <bpmn:sequenceFlow id="SequenceFlow_10xvqn4" sourceRef="Task_1pf0cya" targetRef="Task_0fb7p91" />
-    <bpmn:sequenceFlow id="SequenceFlow_07y4s9a" sourceRef="Task_0brc0hq" targetRef="ExclusiveGateway_07kk9k9" />
-    <bpmn:sequenceFlow id="SequenceFlow_01z0zv9" name="nein" sourceRef="ExclusiveGateway_07kk9k9" targetRef="Task_1pf0cya">
+    <bpmn:sequenceFlow id="SequenceFlow_0run277" sourceRef="StartEvent_BewerbungEingegangen" targetRef="Task_ZufallswerteGenerieren" />
+    <bpmn:sequenceFlow id="SequenceFlow_10xvqn4" sourceRef="Task_AngabenGehenEin" targetRef="Task_ZufallswerteGenerieren" />
+    <bpmn:sequenceFlow id="SequenceFlow_07y4s9a" sourceRef="Task_BewerbungPruefen" targetRef="ExclusiveGateway_07kk9k9" />
+    <bpmn:sequenceFlow id="SequenceFlow_01z0zv9" name="nein" sourceRef="ExclusiveGateway_07kk9k9" targetRef="Task_AngabenGehenEin">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!vollstaendig}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0ei3gjj" name="ja" sourceRef="ExclusiveGateway_07kk9k9" targetRef="Task_0trqo4e">
+    <bpmn:sequenceFlow id="SequenceFlow_0ei3gjj" name="ja" sourceRef="ExclusiveGateway_07kk9k9" targetRef="Task_ManuelleVorqualifizierung">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${vollstaendig}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1b4unvi" sourceRef="Task_0trqo4e" targetRef="ExclusiveGateway_02b33ul" />
-    <bpmn:sequenceFlow id="SequenceFlow_1ilakt5" name="ja" sourceRef="ExclusiveGateway_02b33ul" targetRef="Task_0c8huvr">
+    <bpmn:sequenceFlow id="SequenceFlow_1b4unvi" sourceRef="Task_ManuelleVorqualifizierung" targetRef="ExclusiveGateway_02b33ul" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ilakt5" name="ja" sourceRef="ExclusiveGateway_02b33ul" targetRef="Task_MeinungEingeben">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${vorqualifizierung_erfolgreich}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1to01r7" sourceRef="Task_0c8huvr" targetRef="ExclusiveGateway_1eqi9oj" />
-    <bpmn:sequenceFlow id="SequenceFlow_12yqjhc" name="ja" sourceRef="ExclusiveGateway_1eqi9oj" targetRef="Task_1i0crmq">
+    <bpmn:sequenceFlow id="SequenceFlow_1to01r7" sourceRef="Task_MeinungEingeben" targetRef="ExclusiveGateway_1eqi9oj" />
+    <bpmn:sequenceFlow id="SequenceFlow_12yqjhc" name="ja" sourceRef="ExclusiveGateway_1eqi9oj" targetRef="Task_GespraechDurchfuehren">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${meinung_ok}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1dou0pi" sourceRef="Task_1i0crmq" targetRef="ExclusiveGateway_1t9vt0l" />
-    <bpmn:sequenceFlow id="SequenceFlow_1n95zu3" name="nein" sourceRef="ExclusiveGateway_02b33ul" targetRef="Task_1r31tli">
+    <bpmn:sequenceFlow id="SequenceFlow_1dou0pi" sourceRef="Task_GespraechDurchfuehren" targetRef="ExclusiveGateway_1t9vt0l" />
+    <bpmn:sequenceFlow id="SequenceFlow_1n95zu3" name="nein" sourceRef="ExclusiveGateway_02b33ul" targetRef="Task_BewerberAbsagen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!vorqualifizierung_erfolgreich}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0d7v1eh" sourceRef="BoundaryEvent_0th7d21" targetRef="Task_1r31tli" />
-    <bpmn:sequenceFlow id="SequenceFlow_0csp1ce" name="nein" sourceRef="ExclusiveGateway_1eqi9oj" targetRef="Task_1r31tli">
+    <bpmn:sequenceFlow id="SequenceFlow_0d7v1eh" sourceRef="BoundaryEvent_0th7d21" targetRef="Task_BewerberAbsagen" />
+    <bpmn:sequenceFlow id="SequenceFlow_0csp1ce" name="nein" sourceRef="ExclusiveGateway_1eqi9oj" targetRef="Task_BewerberAbsagen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!meinung_ok}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0fbklrx" name="nein" sourceRef="ExclusiveGateway_1t9vt0l" targetRef="Task_1r31tli">
+    <bpmn:sequenceFlow id="SequenceFlow_0fbklrx" name="nein" sourceRef="ExclusiveGateway_1t9vt0l" targetRef="Task_BewerberAbsagen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!zusage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_04szoqc" name="ja" sourceRef="ExclusiveGateway_1t9vt0l" targetRef="Task_15z9gm5">
+    <bpmn:sequenceFlow id="SequenceFlow_04szoqc" name="ja" sourceRef="ExclusiveGateway_1t9vt0l" targetRef="Task_BewerberInformieren">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${zusage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0q1zhm9" sourceRef="Task_0fb7p91" targetRef="Task_0brc0hq" />
-    <bpmn:startEvent id="StartEvent_1" name="Bewerbung eingegangen">
+    <bpmn:sequenceFlow id="SequenceFlow_0q1zhm9" sourceRef="Task_ZufallswerteGenerieren" targetRef="Task_BewerbungPruefen" />
+    <bpmn:startEvent id="StartEvent_BewerbungEingegangen" name="Bewerbung eingegangen">
       <bpmn:outgoing>SequenceFlow_0run277</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:endEvent id="EndEvent_1v0cmjh" name="Bewerber eingestellt">
+    <bpmn:endEvent id="EndEvent_BewerberEingestellt" name="Bewerber eingestellt">
       <bpmn:incoming>SequenceFlow_0nw90kx</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0nw90kx" sourceRef="Task_15z9gm5" targetRef="EndEvent_1v0cmjh" />
-    <bpmn:serviceTask id="Task_15z9gm5" name="Bewerber informieren" camunda:delegateExpression="${doSomething}">
+    <bpmn:sequenceFlow id="SequenceFlow_0nw90kx" sourceRef="Task_BewerberInformieren" targetRef="EndEvent_BewerberEingestellt" />
+    <bpmn:serviceTask id="Task_BewerberInformieren" name="Bewerber informieren" camunda:delegateExpression="${doSomething}">
       <bpmn:incoming>SequenceFlow_04szoqc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0nw90kx</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="EndEvent_0qzdz1m" name="Bewerbung abgelehnt">
+    <bpmn:endEvent id="EndEvent_BewerbungAbgelehnt" name="Bewerbung abgelehnt">
       <bpmn:incoming>SequenceFlow_0bjjtkv</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0bjjtkv" sourceRef="Task_1r31tli" targetRef="EndEvent_0qzdz1m" />
-    <bpmn:serviceTask id="Task_1r31tli" name="Bewerber absagen" camunda:delegateExpression="${doSomething}">
+    <bpmn:sequenceFlow id="SequenceFlow_0bjjtkv" sourceRef="Task_BewerberAbsagen" targetRef="EndEvent_BewerbungAbgelehnt" />
+    <bpmn:serviceTask id="Task_BewerberAbsagen" name="Bewerber absagen" camunda:delegateExpression="${doSomething}">
       <bpmn:incoming>SequenceFlow_1n95zu3</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0d7v1eh</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0csp1ce</bpmn:incoming>
@@ -116,14 +116,14 @@
     <bpmn:textAnnotation id="TextAnnotation_16azrb2">
       <bpmn:text>Alle Tasks benötigen 1 bis 3 Sekunden</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_1r65gqv" sourceRef="Task_0brc0hq" targetRef="TextAnnotation_16azrb2" />
+    <bpmn:association id="Association_1r65gqv" sourceRef="Task_BewerbungPruefen" targetRef="TextAnnotation_16azrb2" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1pgoefx">
       <bpmndi:BPMNShape id="Participant_0mmd4f1_di" bpmnElement="Participant_0mmd4f1">
         <dc:Bounds x="166" y="-216" width="1567" height="734" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_1fy4emg_di" bpmnElement="Task_0brc0hq">
+      <bpmndi:BPMNShape id="ServiceTask_1fy4emg_di" bpmnElement="Task_BewerbungPruefen">
         <dc:Bounds x="463" y="-76" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_07kk9k9_di" bpmnElement="ExclusiveGateway_07kk9k9" isMarkerVisible="true">
@@ -261,23 +261,23 @@
           <dc:Bounds x="1430" y="116" width="21" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_145fhmg_di" bpmnElement="Task_0trqo4e">
+      <bpmndi:BPMNShape id="ServiceTask_145fhmg_di" bpmnElement="Task_ManuelleVorqualifizierung">
         <dc:Bounds x="838" y="-76" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_1p5nbpr_di" bpmnElement="Task_0c8huvr">
+      <bpmndi:BPMNShape id="ServiceTask_1p5nbpr_di" bpmnElement="Task_MeinungEingeben">
         <dc:Bounds x="1073" y="-76" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0fl8ktz_di" bpmnElement="Task_1i0crmq">
+      <bpmndi:BPMNShape id="ServiceTask_0fl8ktz_di" bpmnElement="Task_GespraechDurchfuehren">
         <dc:Bounds x="1284" y="-76" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0q1zhm9_di" bpmnElement="SequenceFlow_0q1zhm9">
         <di:waypoint x="404" y="-36" />
         <di:waypoint x="463" y="-36" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_1m9wsm4_di" bpmnElement="Task_0fb7p91">
+      <bpmndi:BPMNShape id="ServiceTask_1m9wsm4_di" bpmnElement="Task_ZufallswerteGenerieren">
         <dc:Bounds x="304" y="-76" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0p0kh5a_di" bpmnElement="Task_1pf0cya">
+      <bpmndi:BPMNShape id="ServiceTask_0p0kh5a_di" bpmnElement="Task_AngabenGehenEin">
         <dc:Bounds x="539" y="89" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_16azrb2_di" bpmnElement="TextAnnotation_16azrb2">
@@ -287,19 +287,19 @@
         <di:waypoint x="555" y="-75" />
         <di:waypoint x="584" y="-102" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="StartEvent_087c1r6_di" bpmnElement="StartEvent_1">
+      <bpmndi:BPMNShape id="StartEvent_087c1r6_di" bpmnElement="StartEvent_BewerbungEingegangen">
         <dc:Bounds x="216" y="-54" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="202" y="-11" width="64" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_0kpgxjs_di" bpmnElement="EndEvent_1v0cmjh">
+      <bpmndi:BPMNShape id="EndEvent_0kpgxjs_di" bpmnElement="EndEvent_BewerberEingestellt">
         <dc:Bounds x="1628" y="-54" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1621" y="-11" width="50" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_1510up4_di" bpmnElement="EndEvent_0qzdz1m">
+      <bpmndi:BPMNShape id="EndEvent_1510up4_di" bpmnElement="EndEvent_BewerbungAbgelehnt">
         <dc:Bounds x="1676" y="230" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1666" y="273" width="56" height="27" />
@@ -309,14 +309,14 @@
         <di:waypoint x="1601" y="-36" />
         <di:waypoint x="1628" y="-36" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_15mel0h_di" bpmnElement="Task_15z9gm5">
+      <bpmndi:BPMNShape id="ServiceTask_15mel0h_di" bpmnElement="Task_BewerberInformieren">
         <dc:Bounds x="1501" y="-76" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0bjjtkv_di" bpmnElement="SequenceFlow_0bjjtkv">
         <di:waypoint x="1601" y="248" />
         <di:waypoint x="1676" y="248" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_0l2ray2_di" bpmnElement="Task_1r31tli">
+      <bpmndi:BPMNShape id="ServiceTask_0l2ray2_di" bpmnElement="Task_BewerberAbsagen">
         <dc:Bounds x="1501" y="208" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
