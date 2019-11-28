@@ -46,6 +46,7 @@ services:
       - 26500:26500
     volumes:
       - zeebe_data:/usr/local/zeebe/data
+      - ./zeebe.cfg.toml:/usr/local/zeebe/conf/zeebe.cfg.toml
     environment:
       - ZEEBE_LOG_LEVEL=info
   operate:
@@ -54,10 +55,8 @@ services:
       - 8088:8080
     networks:
       - hackathon
-    environment:
-      CAMUNDA_OPERATE_ZEEBE_BROKERCONTACTPOINT: zeebe:26500
-      CAMUNDA_OPERATE_ZEEBEELASTICSEARCH_HOST: elasticsearch
-      CAMUNDA_OPERATE_ELASTICSEARCH_HOST: elasticsearch
+    volumes:
+      - ./operate-application.yml:/usr/local/operate/config/application.yml
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.5
     ports:
