@@ -10,7 +10,7 @@ import io.zeebe.client.ZeebeClientBuilder;
 @Configuration
 public class ZeebeConfiguration {
 
-    @Value("${zeebe.brokerContactPoint}")
+    @Value("${zeebe.brokercontactpoint}")
     private String brokerContactPoint;
 
     @Bean
