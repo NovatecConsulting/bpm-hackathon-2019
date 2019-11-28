@@ -103,6 +103,7 @@
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- required to use H2 as a file based database  (Otherwise it's In-Memory) -->
@@ -166,6 +167,12 @@
       <groupId>com.camunda.consulting.util</groupId>
       <artifactId>camunda-util-demo-support</artifactId>
       <version>0.4.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.8</version>
     </dependency>
 
   </dependencies>
