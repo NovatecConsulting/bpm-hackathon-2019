@@ -1,0 +1,4 @@
+zeebe:
+  worker.name: "foo-worker"
+  client.broker.contactPoint: zeebe:26500
+  client.security.plaintext: true

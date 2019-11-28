@@ -17,7 +17,7 @@ services:
     depends_on:
       - zeebe
     ports:
-      - 8090:8090
+      - 8090:8080
   zeebe:
     image: camunda/zeebe:0.21.1
     ports:
