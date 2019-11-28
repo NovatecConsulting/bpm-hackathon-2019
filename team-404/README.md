@@ -1,15 +1,19 @@
 # BPM Hackathoon 2019
-## Team Service #1
-Repository for a service team
+## Team 404
+Repository for a small zeebe demo.
 
-## Postgres
-- user/password/database: `camunda`
-
-## Mountebank
-- Dockerfile used from https://github.com/andyrbell/mountebank/blob/master/Dockerfile
-- Configure imposters in `docker/mountebank/imposters/impossters.ejs`
-- Go to http://localhost:2525 to see Mountebank's configuration 
-
-## Run the container
-- go to folder bpm-hackathon-service
+### Run the container
+- go to folder `team-404/docker`
 - run `docker-compose up`
+
+#### Call REST Service
+Send POST to http://localhost:8090/zeebe/start to start the Zeebe workflow.
+
+### Zeebe Operator
+- go to http://localhost:8080 (user: demo, password: demo)
+
+### Kafka Control
+- go to http://localhost:9021
+
+### Kibana
+- go to http://localhost:5601
