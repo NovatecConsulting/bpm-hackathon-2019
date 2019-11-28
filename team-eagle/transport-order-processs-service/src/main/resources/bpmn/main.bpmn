@@ -46,13 +46,13 @@
       <bpmn:outgoing>itinenary-rejected</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="itinenary-confirmed" name="Confirmed" sourceRef="itinerary-confirmation-gateway" targetRef="book-pre-carriage">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">itinerary=confirmed</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">itinerary==confirmed</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="transport-rejected" name="Transport Rejected">
       <bpmn:incoming>itinenary-rejected</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="itinenary-rejected" name="Rejected" sourceRef="itinerary-confirmation-gateway" targetRef="transport-rejected">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">itinerary=rejected</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">itinerary==rejected</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmn:message id="Message_0w5qgqe" name="service-one-response-received-message">
