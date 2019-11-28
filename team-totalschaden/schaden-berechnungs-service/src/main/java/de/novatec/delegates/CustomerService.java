@@ -1,5 +1,7 @@
-package de.novatec;
+package de.novatec.delegates;
 
+import de.novatec.flow.CustomerContext;
+import de.novatec.domain.Customer;
 import kong.unirest.Unirest;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -15,7 +17,7 @@ public class CustomerService implements JavaDelegate {
     }
 
     public Customer getCustomer(String customerId) {
-        String response = Unirest.get("http://localhost:10000/customer/{customerId}").routeParam("customerId", customerId).header("accept", "application/json").toString();
+        String response = Unirest.get("http://mountebank:10000/customer/{customerId}").routeParam("customerId", customerId).header("accept", "application/json").asString().getBody();
         CustomerContext customerContext = CustomerContext.fromJson(response);
         return customerContext.getCustomer();
     }

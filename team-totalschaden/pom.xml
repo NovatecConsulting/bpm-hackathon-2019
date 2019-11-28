@@ -13,6 +13,7 @@
 
 	<modules>
 		<module>schaden-berechnungs-service</module>
+		<module>kfz-schaden-regulierung</module>
 	</modules>
 
 	<build>

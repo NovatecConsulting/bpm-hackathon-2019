@@ -9,6 +9,8 @@ camunda:
     database:
       schema-update: true
       type: postgres
+server:
+  port : 8081
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/camunda
@@ -18,3 +20,11 @@ spring:
 schaden:
   customer:
     endpoint: "http://localhost:10000/customer"
+zeebe:
+  worker:
+    name: "schaden-worker"
+  client:
+    broker:
+      contactPoint: zeebe:26500
+    security:
+      plaintext: true

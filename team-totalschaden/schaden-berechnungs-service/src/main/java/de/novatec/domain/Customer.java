@@ -1,14 +1,6 @@
-package de.novatec;
+package de.novatec.domain;
 
 public class Customer {
-
-    public Customer(String name, String customerNo, String contractNo, int contractLevel, Car car) {
-        this.name = name;
-        this.customerNo = customerNo;
-        this.contractNo = contractNo;
-        this.contractLevel = contractLevel;
-        this.car = car;
-    }
 
     private String name;
     private String customerNo;

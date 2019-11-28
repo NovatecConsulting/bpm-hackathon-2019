@@ -1,14 +1,18 @@
-package de.novatec;
+package de.novatec.domain;
 
 public class Car {
+
+    private int originalValue;
+    private int age;
+    private String brand;
 
     public int getOriginalValue() {
         return originalValue;
     }
 
-    private final int originalValue;
-    private int age;
-    private String brand;
+    public void setOriginalValue(int originalValue) {
+        this.originalValue = originalValue;
+    }
 
     public int getAge() {
         return age;
@@ -35,11 +39,4 @@ public class Car {
     }
 
     private int ps;
-
-    public Car(int originalValue, int age, String brand, int ps) {
-        this.originalValue = originalValue;
-        this.age = age;
-        this.brand = brand;
-        this.ps = ps;
-    }
 }

@@ -7,4 +7,4 @@ RUN mvn -e -B package
 
 FROM openjdk:8-jre-alpine
 COPY --from=builder /workspace/target/schaden-berechnungs-service-0.0.1-SNAPSHOT.jar /service.jar
-CMD ["java", "-jar", "service.jar", "-Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"]
+CMD ["java", "-jar", "service.jar"]

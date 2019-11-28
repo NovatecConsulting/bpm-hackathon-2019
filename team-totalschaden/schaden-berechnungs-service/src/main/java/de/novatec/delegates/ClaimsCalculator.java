@@ -1,4 +1,4 @@
-package de.novatec;
+package de.novatec.delegates;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -19,18 +19,18 @@ public class ClaimsCalculator implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        int wert = (int) delegateExecution.getVariable("wagenAlter");
-        int alter = (int) delegateExecution.getVariable("wagenNeuwert");
+        int wagenAlter = (int) delegateExecution.getVariable("wagenAlter");
+        int wagenNeuwert = (int) delegateExecution.getVariable("wagenNeuwert");
         SchadenType schadenType = SchadenType.valueOf(((String) delegateExecution.getVariable("schadenTyp")).toUpperCase());
 
         double summe = 0;
 
-        if (isNeuwagen(alter) && isTeuer(wert)) {
-            summe = wert * schadenType.high;
-        } else if (isAlt(alter)) {
+        if (isNeuwagen(wagenAlter) && isTeuer(wagenNeuwert)) {
+            summe = wagenNeuwert * schadenType.high;
+        } else if (isAlt(wagenAlter)) {
             summe = 0;
         } else {
-            summe = wert * schadenType.low;
+            summe = wagenNeuwert * schadenType.low;
         }
 
         delegateExecution.setVariable("auszahlung", summe);

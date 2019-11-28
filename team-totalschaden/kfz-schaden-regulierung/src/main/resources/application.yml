@@ -1,0 +1,10 @@
+zeebe:
+  worker:
+    name: "schaden-regulierer"
+  client:
+    broker:
+      contactPoint: zeebe:26500
+    security:
+      plaintext: true
+server:
+  port : 8082
