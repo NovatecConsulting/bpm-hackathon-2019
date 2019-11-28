@@ -12,7 +12,7 @@
       <bpmn:incoming>SequenceFlow_0q1zhm9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_07y4s9a</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_07kk9k9" name="Angaben vollständig?">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_AngabenVollstaendig" name="Angaben vollständig?">
       <bpmn:incoming>SequenceFlow_07y4s9a</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_01z0zv9</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0ei3gjj</bpmn:outgoing>
@@ -29,17 +29,17 @@
       <bpmn:incoming>SequenceFlow_12yqjhc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1dou0pi</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_02b33ul" name="Vorqualifizierung erfolgreich?">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_VorqualifizierungErfolgreich" name="Vorqualifizierung erfolgreich?">
       <bpmn:incoming>SequenceFlow_1b4unvi</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1ilakt5</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1n95zu3</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_1eqi9oj" name="Mindestens eine Zusage?">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_Meinung" name="Mindestens eine Zusage?">
       <bpmn:incoming>SequenceFlow_1to01r7</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12yqjhc</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0csp1ce</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_1t9vt0l" name="Zusage?">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_Zusage" name="Zusage?">
       <bpmn:incoming>SequenceFlow_1dou0pi</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_04szoqc</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0fbklrx</bpmn:outgoing>
@@ -61,33 +61,33 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0run277" sourceRef="StartEvent_BewerbungEingegangen" targetRef="Task_ZufallswerteGenerieren" />
     <bpmn:sequenceFlow id="SequenceFlow_10xvqn4" sourceRef="Task_AngabenGehenEin" targetRef="Task_ZufallswerteGenerieren" />
-    <bpmn:sequenceFlow id="SequenceFlow_07y4s9a" sourceRef="Task_BewerbungPruefen" targetRef="ExclusiveGateway_07kk9k9" />
-    <bpmn:sequenceFlow id="SequenceFlow_01z0zv9" name="nein" sourceRef="ExclusiveGateway_07kk9k9" targetRef="Task_AngabenGehenEin">
+    <bpmn:sequenceFlow id="SequenceFlow_07y4s9a" sourceRef="Task_BewerbungPruefen" targetRef="ExclusiveGateway_AngabenVollstaendig" />
+    <bpmn:sequenceFlow id="SequenceFlow_01z0zv9" name="nein" sourceRef="ExclusiveGateway_AngabenVollstaendig" targetRef="Task_AngabenGehenEin">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!vollstaendig}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0ei3gjj" name="ja" sourceRef="ExclusiveGateway_07kk9k9" targetRef="Task_ManuelleVorqualifizierung">
+    <bpmn:sequenceFlow id="SequenceFlow_0ei3gjj" name="ja" sourceRef="ExclusiveGateway_AngabenVollstaendig" targetRef="Task_ManuelleVorqualifizierung">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${vollstaendig}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1b4unvi" sourceRef="Task_ManuelleVorqualifizierung" targetRef="ExclusiveGateway_02b33ul" />
-    <bpmn:sequenceFlow id="SequenceFlow_1ilakt5" name="ja" sourceRef="ExclusiveGateway_02b33ul" targetRef="Task_MeinungEingeben">
+    <bpmn:sequenceFlow id="SequenceFlow_1b4unvi" sourceRef="Task_ManuelleVorqualifizierung" targetRef="ExclusiveGateway_VorqualifizierungErfolgreich" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ilakt5" name="ja" sourceRef="ExclusiveGateway_VorqualifizierungErfolgreich" targetRef="Task_MeinungEingeben">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${vorqualifizierung_erfolgreich}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1to01r7" sourceRef="Task_MeinungEingeben" targetRef="ExclusiveGateway_1eqi9oj" />
-    <bpmn:sequenceFlow id="SequenceFlow_12yqjhc" name="ja" sourceRef="ExclusiveGateway_1eqi9oj" targetRef="Task_GespraechDurchfuehren">
+    <bpmn:sequenceFlow id="SequenceFlow_1to01r7" sourceRef="Task_MeinungEingeben" targetRef="ExclusiveGateway_Meinung" />
+    <bpmn:sequenceFlow id="SequenceFlow_12yqjhc" name="ja" sourceRef="ExclusiveGateway_Meinung" targetRef="Task_GespraechDurchfuehren">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${meinung_ok}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1dou0pi" sourceRef="Task_GespraechDurchfuehren" targetRef="ExclusiveGateway_1t9vt0l" />
-    <bpmn:sequenceFlow id="SequenceFlow_1n95zu3" name="nein" sourceRef="ExclusiveGateway_02b33ul" targetRef="Task_BewerberAbsagen">
+    <bpmn:sequenceFlow id="SequenceFlow_1dou0pi" sourceRef="Task_GespraechDurchfuehren" targetRef="ExclusiveGateway_Zusage" />
+    <bpmn:sequenceFlow id="SequenceFlow_1n95zu3" name="nein" sourceRef="ExclusiveGateway_VorqualifizierungErfolgreich" targetRef="Task_BewerberAbsagen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!vorqualifizierung_erfolgreich}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0d7v1eh" sourceRef="BoundaryEvent_0th7d21" targetRef="Task_BewerberAbsagen" />
-    <bpmn:sequenceFlow id="SequenceFlow_0csp1ce" name="nein" sourceRef="ExclusiveGateway_1eqi9oj" targetRef="Task_BewerberAbsagen">
+    <bpmn:sequenceFlow id="SequenceFlow_0csp1ce" name="nein" sourceRef="ExclusiveGateway_Meinung" targetRef="Task_BewerberAbsagen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!meinung_ok}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0fbklrx" name="nein" sourceRef="ExclusiveGateway_1t9vt0l" targetRef="Task_BewerberAbsagen">
+    <bpmn:sequenceFlow id="SequenceFlow_0fbklrx" name="nein" sourceRef="ExclusiveGateway_Zusage" targetRef="Task_BewerberAbsagen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!zusage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_04szoqc" name="ja" sourceRef="ExclusiveGateway_1t9vt0l" targetRef="Task_BewerberInformieren">
+    <bpmn:sequenceFlow id="SequenceFlow_04szoqc" name="ja" sourceRef="ExclusiveGateway_Zusage" targetRef="Task_BewerberInformieren">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${zusage}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0q1zhm9" sourceRef="Task_ZufallswerteGenerieren" targetRef="Task_BewerbungPruefen" />
@@ -126,19 +126,19 @@
       <bpmndi:BPMNShape id="ServiceTask_1fy4emg_di" bpmnElement="Task_BewerbungPruefen">
         <dc:Bounds x="463" y="-76" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_07kk9k9_di" bpmnElement="ExclusiveGateway_07kk9k9" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="ExclusiveGateway_07kk9k9_di" bpmnElement="ExclusiveGateway_AngabenVollstaendig" isMarkerVisible="true">
         <dc:Bounds x="715" y="-61" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="711" y="-91" width="58" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_02b33ul_di" bpmnElement="ExclusiveGateway_02b33ul" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="ExclusiveGateway_02b33ul_di" bpmnElement="ExclusiveGateway_VorqualifizierungErfolgreich" isMarkerVisible="true">
         <dc:Bounds x="986" y="-61" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="970" y="-91" width="82" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_1eqi9oj_di" bpmnElement="ExclusiveGateway_1eqi9oj" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="ExclusiveGateway_1eqi9oj_di" bpmnElement="ExclusiveGateway_Meinung" isMarkerVisible="true">
         <dc:Bounds x="1197" y="-61" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1182" y="-91" width="80" height="27" />
@@ -240,7 +240,7 @@
         <di:waypoint x="1384" y="-36" />
         <di:waypoint x="1400" y="-36" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ExclusiveGateway_1t9vt0l_di" bpmnElement="ExclusiveGateway_1t9vt0l" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="ExclusiveGateway_1t9vt0l_di" bpmnElement="ExclusiveGateway_Zusage" isMarkerVisible="true">
         <dc:Bounds x="1400" y="-61" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1403" y="-81" width="43" height="14" />
