@@ -22,6 +22,18 @@ services:
     ports:
       - 8090:8080
 
+  kafka-example:
+    build:
+      context: ..
+      dockerfile: ./docker/kafka-example/Dockerfile
+    networks:
+      - hackathon
+    depends_on:
+      - zeebe
+      - kafka
+    ports:
+      - 8091:8080
+
   zookeeper:
     image: "confluentinc/cp-zookeeper:latest"
     hostname: zookeeper

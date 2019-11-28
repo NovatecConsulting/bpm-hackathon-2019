@@ -1,4 +1,4 @@
-package main.java.de.novatec;
+package de.novatec;
 
 import java.time.Instant;
 import java.util.HashMap;

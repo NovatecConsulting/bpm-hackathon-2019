@@ -6,5 +6,5 @@ COPY zeebe-example/src ./src
 RUN mvn -e -B package
 
 FROM openjdk:8-jre-alpine
-COPY --from=builder /workspace/target/test-service-0.0.1-SNAPSHOT.jar /test-service.jar
-CMD ["java", "-jar", "test-service.jar"]
+COPY --from=builder /workspace/target/zeebe-example-0.0.1-SNAPSHOT.jar /zeebe-example.jar
+CMD ["java", "-jar", "zeebe-example.jar"]
