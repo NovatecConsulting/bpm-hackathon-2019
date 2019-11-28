@@ -2,23 +2,35 @@ package eagle.services.itineraryvalidation
 
 import io.zeebe.client.ZeebeClient
 import io.zeebe.client.api.worker.JobWorker
+import io.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
+
 @Component
 class ItineraryValidation {
 
     private lateinit var zeebeClient: ZeebeClient
-
     private lateinit var jobWorker: JobWorker
+
+    val audience = "f22e7563-2c8f-4a38-9e38-428525018cf9.zeebe.camunda.io"
+    val broker = "f22e7563-2c8f-4a38-9e38-428525018cf9.zeebe.camunda.io:443"
+    val clientSecret = "7iVeetaNK44aNCq6IN1diuKIYFV6cH8LICChkTJ6QyiOssCF1gBSmIZb0YNGIwy4"
+    val clientId = "bqukYPVXbFFmS4G1LhSkwGNTKLVZPnJ9"
 
     @PostConstruct
     fun connectAndSubscribe() {
+        val cred = OAuthCredentialsProviderBuilder()
+                .audience(audience)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .build()
+
         zeebeClient = ZeebeClient.newClientBuilder()
-                .brokerContactPoint("127.0.0.1:26500")
-                .usePlaintext()
+                .credentialsProvider(cred)
+                .brokerContactPoint(broker)
                 .build()
 
         jobWorker = zeebeClient.newWorker()
