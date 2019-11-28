@@ -13,10 +13,9 @@ public class OrderPlacedListener {
     @Autowired
     private ZeebeClient zeebeClient;
 
-    @KafkaListener(groupId = "orderPlaced", id = "orderPlacedListener", topics = "orderPlaced",
-        autoStartup = "${listen.auto.start:true}")
+    @KafkaListener(groupId = "orderPlaced", id = "orderPlacedListener", topics = "orderPlaced")
     public void listen(OrderPlacedEvent order) {
-        System.out.println("Message receied: " + order.toString());
+        System.out.println("Message received: " + order.toString());
 
         WorkflowInstanceEvent workflowInstanceEvent = zeebeClient.newCreateInstanceCommand()
             .bpmnProcessId("OrderProcessId")
