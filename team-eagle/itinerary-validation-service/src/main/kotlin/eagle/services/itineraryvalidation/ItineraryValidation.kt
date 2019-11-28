@@ -1,4 +1,4 @@
-package eagle.services.one
+package eagle.services.itineraryvalidation
 
 import io.zeebe.client.ZeebeClient
 import io.zeebe.client.api.worker.JobWorker
@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
 @Component
-class ServiceOne {
+class ItineraryValidation {
 
     private lateinit var zeebeClient: ZeebeClient
 
@@ -22,7 +22,7 @@ class ServiceOne {
                 .build()
 
         jobWorker = zeebeClient.newWorker()
-                .jobType("service-one")
+                .jobType("validate-itinerary")
                 .handler { jobClient, job ->
                     LOGGER.info("Job received")
                     jobClient.newCompleteCommand(job.key)
@@ -39,7 +39,7 @@ class ServiceOne {
     }
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(ServiceOne.javaClass)
+        private val LOGGER = LoggerFactory.getLogger(ItineraryValidation.javaClass)
     }
 
 }

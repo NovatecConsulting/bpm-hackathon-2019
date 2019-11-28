@@ -1,4 +1,4 @@
-package eagle.services.one
+package eagle.services.itineraryvalidation
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
