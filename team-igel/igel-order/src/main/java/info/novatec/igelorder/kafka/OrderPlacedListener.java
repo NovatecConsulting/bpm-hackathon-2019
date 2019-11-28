@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import info.novatec.messages.OrderPlacedEvent;
 import io.zeebe.client.ZeebeClient;
 import io.zeebe.client.ZeebeClientBuilder;
+import io.zeebe.client.api.response.WorkflowInstanceEvent;
 
 @Component
 public class OrderPlacedListener {
@@ -20,15 +21,20 @@ public class OrderPlacedListener {
     @KafkaListener(groupId = "orderPlaced", id = "orderPlacedListener", topics = "orderPlaced",
         autoStartup = "${listen.auto.start:true}")
     public void listen(OrderPlacedEvent data) {
+        System.out.println("Message receied: " + data.toString());
+
         Map<String, Object> variables = new HashMap<>();
         variables.put("order", data);
         try (ZeebeClient client = zeebeClientBuilder.build()) {
-            client.newPublishMessageCommand()
-                .messageName("OrderPlacedMessage")
-                .correlationKey(data.getOrderId())
+            WorkflowInstanceEvent workflowInstanceEvent = client.newCreateInstanceCommand()
+                .bpmnProcessId("OrderProcessId")
+                .latestVersion()
                 .variables(variables)
                 .send()
                 .join();
+
+            System.out
+                .println("Workflow-Instance with key " + workflowInstanceEvent.getWorkflowInstanceKey() + " created.");
         }
     }
 
