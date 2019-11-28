@@ -1,15 +1,18 @@
 package info.novatec.igelorder.worker;
 
 import info.novatec.messages.OrderPlacedEvent;
+import info.novatec.messages.PaymentReceivedEvent;
 import info.novatec.messages.RetrievePaymentCommand;
 import io.zeebe.client.ZeebeClient;
 import io.zeebe.client.ZeebeClientBuilder;
 import io.zeebe.client.api.response.ActivatedJob;
+import io.zeebe.client.api.response.WorkflowInstanceEvent;
 import io.zeebe.client.api.worker.JobClient;
 import io.zeebe.client.api.worker.JobHandler;
 import io.zeebe.client.api.worker.JobWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -62,4 +65,15 @@ public class PaymentJobWorker implements JobHandler {
                 .send().join();
     }
 
+    @KafkaListener(id = "paymentReceivedListener", topics = "paymentReceived")
+    public void listen(PaymentReceivedEvent payment) {
+        System.out.println("Payment received: " + payment.toString());
+
+        client.newPublishMessageCommand()
+                .messageName("paymentReceived")
+                .correlationKey(payment.getOrderId())
+                .variables(payment)
+                .send()
+                .join();
+    }
 }
