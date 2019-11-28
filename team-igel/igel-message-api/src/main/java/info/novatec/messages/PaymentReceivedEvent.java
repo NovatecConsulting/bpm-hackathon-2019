@@ -47,4 +47,14 @@ public class PaymentReceivedEvent {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "PaymentReceivedEvent{" +
+                "orderId='" + orderId + '\'' +
+                ", item='" + item + '\'' +
+                ", amount=" + amount +
+                ", price=" + price +
+                '}';
+    }
 }

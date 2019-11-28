@@ -4,6 +4,7 @@ import info.novatec.messages.OrderPlacedEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import info.novatec.messages.PaymentReceivedEvent;
 import info.novatec.messages.RetrievePaymentCommand;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -19,31 +20,46 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import java.util.HashMap;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
-@EnableKafka
+//@EnableKafka
 public class KafkaConfig {
 
     @Value("${kafka.bootstrapservers}")
     private String bootstrapServers;
 
     @Bean
-    public ConsumerFactory<String, OrderPlacedEvent> consumerFactory() {
+    public ConsumerFactory<Object, Object> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
+//    @Bean
+//    public ConsumerFactory<String, PaymentReceivedEvent> paymentReceivedConsumerFactory() {
+//        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+//    }
+
     @Bean
-    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, OrderPlacedEvent>> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, OrderPlacedEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        factory.setConcurrency(3);
-        factory.getContainerProperties().setPollTimeout(3000);
-        factory.setAutoStartup(true);
-        factory.setMissingTopicsFatal(false);
-        return factory;
+    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Object, Object>> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<Object, Object> orderPlacedEventFactory = new ConcurrentKafkaListenerContainerFactory<>();
+        orderPlacedEventFactory.setConsumerFactory(consumerFactory());
+        orderPlacedEventFactory.setConcurrency(3);
+        orderPlacedEventFactory.getContainerProperties().setPollTimeout(3000);
+        orderPlacedEventFactory.setAutoStartup(true);
+        orderPlacedEventFactory.setMissingTopicsFatal(false);
+        return orderPlacedEventFactory;
     }
+
+//    @Bean
+//    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, PaymentReceivedEvent>> paymentReceivedCommandKafkaListenerContainerFactory() {
+//        ConcurrentKafkaListenerContainerFactory<String, PaymentReceivedEvent> paymentReceivedFactory = new ConcurrentKafkaListenerContainerFactory<>();
+//        paymentReceivedFactory.setConsumerFactory(paymentReceivedConsumerFactory());
+//        paymentReceivedFactory.setConcurrency(3);
+//        paymentReceivedFactory.getContainerProperties().setPollTimeout(3000);
+//        paymentReceivedFactory.setAutoStartup(true);
+//        paymentReceivedFactory.setMissingTopicsFatal(false);
+//        return paymentReceivedFactory;
+//    }
 
     @Bean
     public Map<String, Object> consumerConfigs() {
