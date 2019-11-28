@@ -36,7 +36,7 @@ public class ZeebeAdapter {
         variables.put(CUSTOMER_ID, customerId);
         variables.put(SCHADEN_TYP, schadenTyp);
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("ClaimsCalculatorService", String.valueOf(job.getKey()), variables);
-        int auszahlung = (int) historyService.createHistoricVariableInstanceQuery().variableName(AUSZAHLUNG).processInstanceId(processInstance.getId()).singleResult().getValue();
+        double auszahlung = (double) historyService.createHistoricVariableInstanceQuery().variableName(AUSZAHLUNG).processInstanceId(processInstance.getId()).singleResult().getValue();
         Map<String, Object> result = new HashMap<>();
         result.put(AUSZAHLUNG, auszahlung);
         client.newCompleteCommand(job.getKey()).variables(result).send().join();

@@ -84,6 +84,7 @@ services:
       - kfz-regulieren
     ports:
       - 8081:8081
+
   kfz-regulieren:
     build:
       context: ..
@@ -92,6 +93,20 @@ services:
       - hackathon
     depends_on:
       - zeebe
+    ports:
+      - 8082:8082
+
+  schaden-verbuchen:
+    build:
+      context: ..
+      dockerfile: ./docker/schaden-verbuchen/Dockerfile
+    networks:
+      - hackathon
+    depends_on:
+      - zeebe
+    ports:
+      - 8083:8083
+
 networks:
   hackathon:
 

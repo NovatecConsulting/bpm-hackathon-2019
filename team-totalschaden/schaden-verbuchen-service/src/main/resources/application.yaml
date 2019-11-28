@@ -1,1 +1,10 @@
-
+server:
+  port: 8083
+zeebe:
+  worker:
+    name: "buchen-worker"
+  client:
+    broker:
+      contactPoint: zeebe:26500
+    security:
+      plaintext: true

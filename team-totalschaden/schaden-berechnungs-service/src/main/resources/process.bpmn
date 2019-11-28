@@ -9,14 +9,14 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1w6uz8q</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Task_0jqpc0h" name="get customer data" camunda:class="de.novatec.CustomerService">
+    <bpmn:serviceTask id="Task_0jqpc0h" name="get customer data" camunda:class="de.novatec.delegates.CustomerService">
       <bpmn:incoming>SequenceFlow_1w6uz8q</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1m4dfrz</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1w6uz8q" sourceRef="StartEvent_1" targetRef="Task_0jqpc0h" />
     <bpmn:sequenceFlow id="SequenceFlow_1m4dfrz" sourceRef="Task_0jqpc0h" targetRef="Task_1q5y72l" />
     <bpmn:sequenceFlow id="SequenceFlow_07cj4hj" sourceRef="Task_1q5y72l" targetRef="EndEvent_0hbrhfy" />
-    <bpmn:serviceTask id="Task_1q5y72l" name="calculate claim" camunda:class="de.novatec.ClaimsCalculator">
+    <bpmn:serviceTask id="Task_1q5y72l" name="calculate claim" camunda:class="de.novatec.delegates.ClaimsCalculator">
       <bpmn:incoming>SequenceFlow_1m4dfrz</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_07cj4hj</bpmn:outgoing>
     </bpmn:serviceTask>
