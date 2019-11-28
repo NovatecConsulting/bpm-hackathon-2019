@@ -1,6 +1,7 @@
 # Monitoring
 
 ## Start:
+docker-compose build
 docker-compose up
 
 ## Start Application
