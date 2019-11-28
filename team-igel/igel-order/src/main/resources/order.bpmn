@@ -26,7 +26,7 @@
   <bpmn:message id="Message_167l0wm" name="OrderPlacedMessage" />
   <bpmn:message id="Message_1whu7lu" name="paymentReceived">
     <bpmn:extensionElements>
-      <zeebe:subscription correlationKey="correlationId_paymentReceived" />
+      <zeebe:subscription correlationKey="orderId" />
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
