@@ -1,4 +1,4 @@
-package eagle.services.precarriagebooking
+package eagle.services.airfreightbooking
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
