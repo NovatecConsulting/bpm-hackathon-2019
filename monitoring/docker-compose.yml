@@ -78,6 +78,8 @@ services:
       POSTGRES_USER: demo
       POSTGRES_PASSWORD: demo
       POSTGRES_DB: demo
+    networks:
+      - elk
 
 networks:
   elk:
