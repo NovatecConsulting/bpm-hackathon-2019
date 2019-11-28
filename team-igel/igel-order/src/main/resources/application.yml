@@ -1,0 +1,5 @@
+zeebe:
+  brokerContactPoint: localhost:26500
+  
+kafka:
+  bootstrapservers: localhost:9093
