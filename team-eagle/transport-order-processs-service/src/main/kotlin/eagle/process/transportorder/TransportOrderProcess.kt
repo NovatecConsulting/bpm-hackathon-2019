@@ -4,6 +4,8 @@ import io.zeebe.client.ZeebeClient
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
@@ -43,7 +45,7 @@ class TransportOrderProcess {
                 .send()
                 .join()
 
-        return ResponseEntity.noContent().build()
+        return ResponseEntity.ok().body(workflowInstanceEvent.workflowInstanceKey.toString())
     }
 
     companion object {

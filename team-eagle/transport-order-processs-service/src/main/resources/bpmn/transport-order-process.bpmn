@@ -2,39 +2,48 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_072pgd4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.7.0">
   <bpmn:process id="transport-order-process" name="Transport Order Process" isExecutable="true">
     <bpmn:endEvent id="transport-booked" name="Transport Booked">
-      <bpmn:incoming>SequenceFlow_121x8db</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_06ot38h</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_10s2y0s" sourceRef="transport-requested" targetRef="validate-itinerary" />
     <bpmn:serviceTask id="book-pre-carriage" name="Book Pre-Carriage">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="book-pre-carriage" />
+        <zeebe:taskDefinition type="book-pre-carriage" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:output source="booking" target="preCarriageBookingResult" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>itinenary-confirmed</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1602lr4</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1602lr4" sourceRef="book-pre-carriage" targetRef="book-airfreight-transport" />
+    <bpmn:sequenceFlow id="SequenceFlow_1602lr4" sourceRef="book-pre-carriage" targetRef="pre-carriage-gateway" />
     <bpmn:startEvent id="transport-requested" name="Transport Requested">
       <bpmn:outgoing>SequenceFlow_10s2y0s</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:serviceTask id="book-on-carriage" name="Book On-Carriage">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="book-on-carriage" />
+        <zeebe:taskDefinition type="book-on-carriage" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:output source="booking" target="onCarriageBookingResult" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_14ap9a4</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_15msgoz</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_121x8db</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_121x8db" sourceRef="book-on-carriage" targetRef="transport-booked" />
+    <bpmn:sequenceFlow id="SequenceFlow_121x8db" sourceRef="book-on-carriage" targetRef="on-carriage-gateway" />
     <bpmn:serviceTask id="book-airfreight-transport" name="Book Airfreight Transport">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="book-airfreight-transport" />
+        <zeebe:taskDefinition type="book-airfreight-transport" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:output source="booking" target="airfreightBookingResult" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_1602lr4</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1rl0n61</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_14ap9a4</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_14ap9a4" sourceRef="book-airfreight-transport" targetRef="book-on-carriage" />
+    <bpmn:sequenceFlow id="SequenceFlow_14ap9a4" sourceRef="book-airfreight-transport" targetRef="airfreight-booking-gateway" />
     <bpmn:serviceTask id="validate-itinerary" name="Validate Itinerary">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="validate-itinerary" />
+        <zeebe:taskDefinition type="validate-itinerary" retries="3" />
         <zeebe:ioMapping>
           <zeebe:output source="itinerary" target="itinerary" />
         </zeebe:ioMapping>
@@ -52,10 +61,78 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">itinerary=="confirmed"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="transport-rejected" name="Transport Rejected">
-      <bpmn:incoming>itinenary-rejected</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1t99u16</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="itinenary-rejected" name="Rejected" sourceRef="itinerary-confirmation-gateway" targetRef="transport-rejected">
+    <bpmn:sequenceFlow id="itinenary-rejected" name="Rejected" sourceRef="itinerary-confirmation-gateway" targetRef="ExclusiveGateway_0u7a80c">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">itinerary=="rejected"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="airfreight-booking-gateway" name="Airfreight Booking Successful ?">
+      <bpmn:incoming>SequenceFlow_14ap9a4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_15msgoz</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0p4mtas</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_15msgoz" name="Aifreight Booking Confirmed" sourceRef="airfreight-booking-gateway" targetRef="book-on-carriage">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">airfreightBookingResult=="confirmed"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0p4mtas" name="Airfreight Booking Rejected" sourceRef="airfreight-booking-gateway" targetRef="ExclusiveGateway_1nd9f2n">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">airfreightBookingResult=="rejected"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="cancel-pre-carriage" name="Cancel Pre-Carriage">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="cancel-pre-carriage" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:output source="booking" target="airfreightBookingResult" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1fah7n0</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0bk4gd4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="on-carriage-gateway" name="On-Carraige Booking Successfull ?">
+      <bpmn:incoming>SequenceFlow_121x8db</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_06ot38h</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1pprjt0</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_06ot38h" name="On-Carriage Booking Confirmed" sourceRef="on-carriage-gateway" targetRef="transport-booked">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">onCarriageBookingResult=="confirmed"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1nd9f2n">
+      <bpmn:incoming>SequenceFlow_0p4mtas</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_18cj8qi</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1fah7n0</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0u7a80c">
+      <bpmn:incoming>itinenary-rejected</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0bk4gd4</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1gtykfr</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1t99u16</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1t99u16" sourceRef="ExclusiveGateway_0u7a80c" targetRef="transport-rejected" />
+    <bpmn:sequenceFlow id="SequenceFlow_0bk4gd4" sourceRef="cancel-pre-carriage" targetRef="ExclusiveGateway_0u7a80c" />
+    <bpmn:serviceTask id="cancel-airfreight-transport" name="Cancel Airfreight Transport">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="cancel-airfreight-transport" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:output source="booking" target="airfreightBookingResult" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1pprjt0</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_18cj8qi</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_18cj8qi" sourceRef="cancel-airfreight-transport" targetRef="ExclusiveGateway_1nd9f2n" />
+    <bpmn:sequenceFlow id="SequenceFlow_1fah7n0" sourceRef="ExclusiveGateway_1nd9f2n" targetRef="cancel-pre-carriage" />
+    <bpmn:sequenceFlow id="SequenceFlow_1pprjt0" name="On-Carriage Booking Rejected" sourceRef="on-carriage-gateway" targetRef="cancel-airfreight-transport">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">onCarriageBookingResult=="rejected"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="pre-carriage-gateway" name="Pre-Carraige Booking Successfull ?">
+      <bpmn:incoming>SequenceFlow_1602lr4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1rl0n61</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1gtykfr</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1rl0n61" name="Pre-Carriage Booking Confirmed" sourceRef="pre-carriage-gateway" targetRef="book-airfreight-transport">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">preCarriageBookingResult=="confirmed"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1gtykfr" name="Pre-Carriage Booking Rejected" sourceRef="pre-carriage-gateway" targetRef="ExclusiveGateway_0u7a80c">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">preCarriageBookingResult=="rejected"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmn:message id="Message_0w5qgqe" name="service-one-response-received-message">
@@ -67,9 +144,9 @@
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="transport-order-process">
       <bpmndi:BPMNShape id="EndEvent_1b7wrpm_di" bpmnElement="transport-booked">
-        <dc:Bounds x="1072" y="129" width="36" height="36" />
+        <dc:Bounds x="1652" y="129" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1047" y="172" width="88" height="14" />
+          <dc:Bounds x="1627" y="172" width="88" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_10s2y0s_di" bpmnElement="SequenceFlow_10s2y0s">
@@ -81,7 +158,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1602lr4_di" bpmnElement="SequenceFlow_1602lr4">
         <di:waypoint x="670" y="147" />
-        <di:waypoint x="740" y="147" />
+        <di:waypoint x="745" y="147" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="StartEvent_0ygi41l_di" bpmnElement="transport-requested">
         <dc:Bounds x="172" y="129" width="36" height="36" />
@@ -90,18 +167,18 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0glezvg_di" bpmnElement="book-on-carriage">
-        <dc:Bounds x="900" y="107" width="100" height="80" />
+        <dc:Bounds x="1300" y="107" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_121x8db_di" bpmnElement="SequenceFlow_121x8db">
-        <di:waypoint x="1000" y="147" />
-        <di:waypoint x="1072" y="147" />
+        <di:waypoint x="1400" y="147" />
+        <di:waypoint x="1455" y="147" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0m4qex3_di" bpmnElement="book-airfreight-transport">
-        <dc:Bounds x="740" y="107" width="100" height="80" />
+        <dc:Bounds x="930" y="107" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_14ap9a4_di" bpmnElement="SequenceFlow_14ap9a4">
-        <di:waypoint x="840" y="147" />
-        <di:waypoint x="900" y="147" />
+        <di:waypoint x="1030" y="147" />
+        <di:waypoint x="1095" y="147" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0f4jeuo_di" bpmnElement="validate-itinerary">
         <dc:Bounds x="270" y="107" width="100" height="80" />
@@ -124,17 +201,110 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_1lcwpye_di" bpmnElement="transport-rejected">
-        <dc:Bounds x="1072" y="232" width="36" height="36" />
+        <dc:Bounds x="1652" y="472" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1068" y="275" width="47" height="27" />
+          <dc:Bounds x="1648" y="515" width="47" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_17wq3p3_di" bpmnElement="itinenary-rejected">
         <di:waypoint x="440" y="172" />
-        <di:waypoint x="440" y="250" />
-        <di:waypoint x="1072" y="250" />
+        <di:waypoint x="440" y="335" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="434" y="208" width="44" height="14" />
+          <dc:Bounds x="448" y="322" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1fa5ihz_di" bpmnElement="airfreight-booking-gateway" isMarkerVisible="true">
+        <dc:Bounds x="1095" y="122" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1076" y="84.5" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_15msgoz_di" bpmnElement="SequenceFlow_15msgoz">
+        <di:waypoint x="1145" y="147" />
+        <di:waypoint x="1300" y="147" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1181" y="156" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0p4mtas_di" bpmnElement="SequenceFlow_0p4mtas">
+        <di:waypoint x="1120" y="172" />
+        <di:waypoint x="1120" y="230" />
+        <di:waypoint x="850" y="230" />
+        <di:waypoint x="850" y="335" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1016" y="245.9999999999999" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0n8vz9r_di" bpmnElement="cancel-pre-carriage">
+        <dc:Bounds x="570" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1j0th2v_di" bpmnElement="on-carriage-gateway" isMarkerVisible="true">
+        <dc:Bounds x="1455" y="122" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1448" y="79" width="65" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_06ot38h_di" bpmnElement="SequenceFlow_06ot38h">
+        <di:waypoint x="1505" y="147" />
+        <di:waypoint x="1652" y="147" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1548" y="159" width="61" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1nd9f2n_di" bpmnElement="ExclusiveGateway_1nd9f2n" isMarkerVisible="true">
+        <dc:Bounds x="825" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0u7a80c_di" bpmnElement="ExclusiveGateway_0u7a80c" isMarkerVisible="true">
+        <dc:Bounds x="415" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1t99u16_di" bpmnElement="SequenceFlow_1t99u16">
+        <di:waypoint x="440" y="385" />
+        <di:waypoint x="440" y="490" />
+        <di:waypoint x="1652" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bk4gd4_di" bpmnElement="SequenceFlow_0bk4gd4">
+        <di:waypoint x="570" y="360" />
+        <di:waypoint x="465" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0a2gi88_di" bpmnElement="cancel-airfreight-transport">
+        <dc:Bounds x="940" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_18cj8qi_di" bpmnElement="SequenceFlow_18cj8qi">
+        <di:waypoint x="940" y="360" />
+        <di:waypoint x="875" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1fah7n0_di" bpmnElement="SequenceFlow_1fah7n0">
+        <di:waypoint x="825" y="360" />
+        <di:waypoint x="670" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1pprjt0_di" bpmnElement="SequenceFlow_1pprjt0">
+        <di:waypoint x="1480" y="172" />
+        <di:waypoint x="1480" y="360" />
+        <di:waypoint x="1040" y="360" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1452" y="263" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1jyekuv_di" bpmnElement="pre-carriage-gateway" isMarkerVisible="true">
+        <dc:Bounds x="745" y="122" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="737" y="70" width="65" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1rl0n61_di" bpmnElement="SequenceFlow_1rl0n61">
+        <di:waypoint x="795" y="147" />
+        <di:waypoint x="930" y="147" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="824" y="150" width="63" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1gtykfr_di" bpmnElement="SequenceFlow_1gtykfr">
+        <di:waypoint x="770" y="172" />
+        <di:waypoint x="770" y="230" />
+        <di:waypoint x="600" y="230" />
+        <di:waypoint x="463" y="358" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="656" y="196" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
