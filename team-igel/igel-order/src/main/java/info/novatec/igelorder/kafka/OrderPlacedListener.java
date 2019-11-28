@@ -13,7 +13,7 @@ public class OrderPlacedListener {
     @Autowired
     private ZeebeClient zeebeClient;
 
-    @KafkaListener(groupId = "orderPlaced", id = "orderPlacedListener", topics = "orderPlaced")
+    @KafkaListener(id = "orderPlacedListener", topics = "orderPlaced")
     public void listen(OrderPlacedEvent order) {
         System.out.println("Message received: " + order.toString());
 
