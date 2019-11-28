@@ -34,15 +34,18 @@ services:
         target: /usr/share/logstash/last_run/
         read_only: false
       - type: bind
-        source: ./elk_config/logstash/config/logstash.yml
-        target: /usr/share/logstash/config/logstash.yml
+        source: ./elk_config/logstash/config/
+        target: /usr/share/logstash/config/
         read_only: true
       - type: bind
         source: ./elk_config/logstash/pipeline
         target: /usr/share/logstash/pipeline
         read_only: true
+      - type: bind
+        source: ./elk_config/logstash/sql
+        target: /usr/share/logstash/sql
+        read_only: true
     ports:
-      - "5000:5000"
       - "9600:9600"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"

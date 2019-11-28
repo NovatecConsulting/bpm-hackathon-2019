@@ -1,0 +1,8 @@
+# This file is where you define your pipelines. You can define multiple.
+# For more information on multiple pipelines, see the documentation:
+#   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
+
+- pipeline.id: act_hi_procinst
+  path.config: "/usr/share/logstash/pipeline/act_hi_procinst.conf"
+- pipeline.id: act_hi_actinst
+  path.config: "/usr/share/logstash/pipeline/act_hi_actinst.conf"
