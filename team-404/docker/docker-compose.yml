@@ -10,10 +10,10 @@ volumes:
   zeebe_elasticsearch_data:
 
 services:
-  service_a:
+  zeebe-example:
     build:
       context: ..
-      dockerfile: ./docker/service_a/Dockerfile
+      dockerfile: ./docker/zeebe-example/Dockerfile
     networks: 
       - hackathon
     depends_on:

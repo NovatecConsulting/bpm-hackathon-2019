@@ -1,4 +1,4 @@
-package de.novatec;
+package main.java.de.novatec;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

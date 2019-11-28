@@ -1,8 +1,8 @@
 FROM maven:3-jdk-8 as builder
 VOLUME /tmp
 WORKDIR /workspace
-COPY pom.xml .
-COPY src ./src
+COPY zeebe-example/pom.xml .
+COPY zeebe-example/src ./src
 RUN mvn -e -B package
 
 FROM openjdk:8-jre-alpine

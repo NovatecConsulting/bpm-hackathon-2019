@@ -1,4 +1,4 @@
-package de.novatec;
+package main.java.de.novatec;
 
 import java.util.UUID;
 
