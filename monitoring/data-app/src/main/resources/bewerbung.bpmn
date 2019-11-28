@@ -44,7 +44,7 @@
       <bpmn:outgoing>SequenceFlow_04szoqc</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0fbklrx</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Task_0fb7p91" name="Zufallswerte generieren" camunda:delegateExpression="${initValues}">
+    <bpmn:serviceTask id="Task_0fb7p91" name="Zufallswerte generieren" camunda:asyncBefore="true" camunda:delegateExpression="${initValues}">
       <bpmn:incoming>SequenceFlow_0run277</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_10xvqn4</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0q1zhm9</bpmn:outgoing>
