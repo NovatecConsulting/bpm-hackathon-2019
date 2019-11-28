@@ -1,0 +1,6 @@
+logging:
+  level:
+    ROOT: info
+
+server:
+  port: 3000
