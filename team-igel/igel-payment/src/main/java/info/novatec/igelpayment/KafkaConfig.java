@@ -1,9 +1,9 @@
-package info.novatec.igelorder;
+package info.novatec.igelpayment;
 
-import info.novatec.messages.OrderPlacedEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import info.novatec.messages.PaymentReceivedEvent;
 import info.novatec.messages.RetrievePaymentCommand;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -18,9 +18,9 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-
-import java.util.HashMap;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+
+import info.novatec.messages.OrderPlacedEvent;
 
 @Configuration
 @EnableKafka
@@ -30,35 +30,7 @@ public class KafkaConfig {
     private String bootstrapServers;
 
     @Bean
-    public ConsumerFactory<String, OrderPlacedEvent> consumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
-    }
-
-    @Bean
-    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, OrderPlacedEvent>> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, OrderPlacedEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        factory.setConcurrency(3);
-        factory.getContainerProperties().setPollTimeout(3000);
-        factory.setAutoStartup(true);
-        factory.setMissingTopicsFatal(false);
-        return factory;
-    }
-
-    @Bean
-    public Map<String, Object> consumerConfigs() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "igelOrder");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, "info.novatec.messages");
-        return props;
-    }
-
-    @Bean
-    public ProducerFactory<String, RetrievePaymentCommand> producerFactory() {
+    public ProducerFactory<String, PaymentReceivedEvent> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
@@ -74,7 +46,36 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, RetrievePaymentCommand> kafkaTemplate() {
-        return new KafkaTemplate<String, RetrievePaymentCommand>(producerFactory());
+    public KafkaTemplate<String, PaymentReceivedEvent> kafkaTemplate() {
+        return new KafkaTemplate<String, PaymentReceivedEvent>(producerFactory());
     }
+
+    @Bean
+    public ConsumerFactory<String, RetrievePaymentCommand> consumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+    }
+
+    @Bean
+    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, RetrievePaymentCommand>> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, RetrievePaymentCommand> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        factory.setConcurrency(3);
+        factory.getContainerProperties().setPollTimeout(3000);
+        factory.setAutoStartup(true);
+        factory.setMissingTopicsFatal(false);
+        return factory;
+    }
+
+    @Bean
+    public Map<String, Object> consumerConfigs() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "igelPayment");
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "info.novatec.messages");
+        return props;
+    }
+
 }
