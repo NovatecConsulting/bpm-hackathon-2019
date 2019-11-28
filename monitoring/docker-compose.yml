@@ -16,7 +16,7 @@ services:
       - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_PASSWORD: demo
+      ELASTIC_PASSWORD: ${ELASTIC_PW}
     networks:
       - elk
 
@@ -36,6 +36,7 @@ services:
       - "9600:9600"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PW: ${ELASTIC_PW}
     networks:
       - elk
     depends_on:
@@ -50,6 +51,8 @@ services:
         read_only: true
     ports:
       - "5601:5601"
+    environment:
+      ELASTIC_PW: ${ELASTIC_PW}
     networks:
       - elk
     depends_on:
