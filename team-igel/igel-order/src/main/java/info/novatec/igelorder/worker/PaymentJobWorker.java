@@ -1,6 +1,7 @@
 package info.novatec.igelorder.worker;
 
 import info.novatec.messages.OrderPlacedEvent;
+import info.novatec.messages.RetrievePaymentCommand;
 import io.zeebe.client.ZeebeClient;
 import io.zeebe.client.ZeebeClientBuilder;
 import io.zeebe.client.api.response.ActivatedJob;
@@ -8,6 +9,8 @@ import io.zeebe.client.api.worker.JobClient;
 import io.zeebe.client.api.worker.JobHandler;
 import io.zeebe.client.api.worker.JobWorker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +26,9 @@ public class PaymentJobWorker implements JobHandler {
     private ZeebeClient client;
 
     private JobWorker worker;
+
+    @Autowired
+    private KafkaTemplate<String, RetrievePaymentCommand> template;
 
     @PostConstruct
     public void initWorker() {
@@ -51,6 +57,7 @@ public class PaymentJobWorker implements JobHandler {
     public void handle(JobClient client, ActivatedJob job) throws Exception {
         OrderPlacedEvent order = job.getVariablesAsType(OrderPlacedEvent.class);
         System.out.println("Payment worker is working, handling, partying: " + order);
+        template.send("retrievePayment", order.getOrderId(), new RetrievePaymentCommand(order.getOrderId(), order.getItem(), order.getAmount()));
         client.newCompleteCommand(job.getKey())
                 .send().join();
     }
